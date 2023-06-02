@@ -56,7 +56,11 @@
             -}}
 
             l.Info("{{ $n.Name | kebab }} rendered", {{ $zapID }})
-            easyjson.MarshalToHTTPResponseWriter(New{{ (view $n ($n.Annotations.ElkSchema.CreateGroups | stringSlice)).Name }}(ret), w)
+            easyjson.MarshalToHTTPResponseWriter(OkResponse{
+                Code:    0,
+                Message: "",
+                Data: New{{ (view $n ($n.Annotations.ElkSchema.CreateGroups | stringSlice)).Name }}(ret),
+            }, w)
         }
     {{ end }}
 {{ end }}

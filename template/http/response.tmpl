@@ -8,8 +8,23 @@
     // Basic HTTP Error Response
     type ErrResponse struct {
         Code   int         `json:"code"`             // http response status code
-        Status string      `json:"status"`           // user-level status message
+        Message string      `json:"message"`           // user-level status message
         Errors interface{} `json:"errors,omitempty"` // application-level error
+    }
+
+    // Basic HTTP Ok Response
+    type OkResponse struct {
+        Code   int         `json:"code"`             // http response status code
+        Message string      `json:"message"`           // user-level status message
+        Data interface{} `json:"data,omitempty"` // application-level error
+    }
+
+    // Pagination Data Struct
+    type Pagination struct {
+    	List     interface{} `json:"list"`
+    	Total    int         `json:"total"`
+    	Page     int         `json:"page"`
+    	PageSize int         `json:"page_size"`
     }
 
     func (e ErrResponse) MarshalToHTTPResponseWriter(w http.ResponseWriter) (int, error) {
@@ -27,7 +42,7 @@
         func {{ . }}(w http.ResponseWriter, msg interface{}) (int, error) {
             return ErrResponse{
                 Code: http.Status{{ . }},
-                Status: http.StatusText(http.Status{{ . }}),
+                Message: http.StatusText(http.Status{{ . }}),
                 Errors: msg,
             }.MarshalToHTTPResponseWriter(w)
         }
@@ -57,6 +72,7 @@
             if e == nil {
                 return nil
             }
+
             return &{{ $n }}{
                 {{- range $f := $v.Fields }}
                     {{ $f.StructField }}: e.{{ $f.StructField }},

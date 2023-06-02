@@ -51,7 +51,7 @@ func EasyJSONGenerator(c EasyJsonConfig) gen.Hook {
 				)
 			}
 			// Add the ErrResponse.
-			ns = append(ns, "ErrResponse")
+			ns = append(ns, "ErrResponse", "OkResponse")
 			// Run the easyjson generator.
 			return (&bootstrap.Generator{
 				PkgPath:                  g.Package + "/http",

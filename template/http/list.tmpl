@@ -18,10 +18,26 @@
                 q{{ .EntQuery }}
             {{- end }}
             var err error
+
+            total, err := h.client.{{ $n.Name }}.Query().Count(r.Context())
+
+            if err != nil {
+                InternalServerError(w, nil)
+                return
+            }
+
             {{- template "helper/http/pagination" $n -}}
 
             l.Info("{{ $n.Name | kebab | pluralize }} rendered", zap.Int("amount", len(es)))
-            easyjson.MarshalToHTTPResponseWriter(New{{ (view $n ($n.Annotations.ElkSchema.ListGroups | stringSlice)).Name }}s(es), w)
+            easyjson.MarshalToHTTPResponseWriter(OkResponse{
+                Code: 0,
+                Message: "",
+                Data: Pagination{
+                    Total: total,
+                    PageSize: itemsPerPage,
+                    List: New{{ (view $n ($n.Annotations.ElkSchema.ListGroups | stringSlice)).Name }}s(es),
+                },
+            }, w)
         }
     {{ end }}
 {{ end }}
