@@ -42,7 +42,7 @@
         func {{ . }}(w http.ResponseWriter, msg interface{}) (int, error) {
             return ErrResponse{
                 Code: http.Status{{ . }},
-                Message: msg,
+                Message: msg.(string),
             }.MarshalToHTTPResponseWriter(w)
         }
     {{ end }}
