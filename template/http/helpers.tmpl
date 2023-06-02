@@ -96,7 +96,7 @@
         {{- end }}
         default:
             l.Error("{{ $.Default }}", zap.Error(err){{ range $.Logs }}, {{ . }}{{ end }})
-            InternalServerError(w, nil)
+            InternalServerError(w, stripEntError(err))
         }
         return
     }
@@ -125,7 +125,7 @@
     es, err := q.Limit(itemsPerPage).Offset((page - 1) * itemsPerPage).All(r.Context())
     if err != nil {
         l.Error("error fetching {{ $.Name | kebab | pluralize }} from db", zap.Error(err))
-        InternalServerError(w, nil)
+        InternalServerError(w, stripEntError(err))
         return
     }
 {{ end }}
