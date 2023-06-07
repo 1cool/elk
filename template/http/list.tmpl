@@ -34,6 +34,7 @@
                 Message: "",
                 Data: Pagination{
                     Total: total,
+                    Page:  page,
                     PageSize: itemsPerPage,
                     List: New{{ (view $n ($n.Annotations.ElkSchema.ListGroups | stringSlice)).Name }}s(es),
                 },
